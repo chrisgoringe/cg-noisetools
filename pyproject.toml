@@ -1,0 +1,13 @@
+[project]
+name = "cg-noisetools"
+description = "A set of nodes that manipulate noise sources."
+version = "1.0"
+license = { file = "LICENSE" }
+
+[project.urls]
+Repository = "https://github.com/chrisgoringe/cg-noisetools"
+
+[tool.comfy]
+PublisherId = "chrisgoringe"
+DisplayName = "cg-noisetools"
+Icon = ""
