@@ -6,19 +6,27 @@ Two nodes for playing with noise.
 
 `Shape Noise` is designed to push noise towards (or away from) the center of the image.
 
+All the images below were generated using [LEOSAM](https://civitai.com/user/LEOSAM)'s HelloWorld XL 7, and
+the prompt was stolen from the [example image](https://civitai.com/images/15652252).
+
+Drag and drop any of these images into Comfy to get the workflow.
+
 ## Mix Noise
 
-This node takes two noise inputs and produces a weighted mix, optionally with a weight mask.
+This node takes two noise inputs and produces a weighted mix, optionally with a weight mask. The effect is to allow you to interpolate the noise between two extremes, or generate small variations:
 
-Note that this is not the sort of noise masking you want for inpainting - the sampler will try to remove noise globally. 
+|Seed 1|0.1|0.3|0.5|Seed 2|
+|-|-|-|-|-|
+|![1](media/weight0.00.png)|![1](media/weight0.10.png)|![1](media/weight0.30.png)|![1](media/weight0.50.png)|![1](media/weight1.00.png)
+
 
 ### Inputs 
 
 - *Required* - `noise1` - the original noise source.
 - *Optional* - `noise2` - the secondary noise source. If not connected, it is zero noise.
 - *Required* - `weight2` - the weight given to the second noise source. The first noise source has weight `1-weight2`.
-- *Optional* - `mask` - multiply `weight2` by the mask values. The mask will be rescaled to fit the latent.
-- *Required* - `renormalise` - should the noise be renormalised to mean of zero and stdev of one after mixing. Normally `yes`.
+- *Optional* - `mask` - multiply `weight2` by the mask values. The mask will be rescaled to fit the latent. Note that this is not the sort of noise masking you want for inpainting - the sampler will try to remove noise globally. 
+- *Required* - `renormalise` - should the noise be renormalised (`mean=0, stdev=1`) after mixing. Normally `yes`.
 
 ### Outputs
 
@@ -46,7 +54,16 @@ If you leave `noise2` unconnected, the effect of the mask is to reduce the noise
 
 ## Shape Noise
 
-This node takes a noise input and applies some simple shaping options to it.
+This node takes a noise input and applies some simple shaping options to it. The effect is to push detail into the middle, or out of it.
+
+||0.1|0.2|0.3|0.4|0.5|
+|-|-|-|-|-|-|
+|+|![1](media/shape0.10.png)|![1](media/shape0.20.png)|![1](media/shape0.30.png)|![1](media/shape0.40.png)|![1](media/shape0.50.png)|
+|-|![1](media/negshape0.10.png)|![1](media/negshape0.20.png)|![1](media/negshape0.30.png)|![1](media/negshape0.40.png)|![1](media/negshape0.50.png)|
+
+The negative push breaks down when the detail is pushed out to the corners, and the sampler can't make any sense of it. The more realistic an image, generally the sooner it breaks down.
+
+A small negative value can help detail spread across the whole image (as there is a tendency for many models to focus on the main feature in the center)
 
 ### Inputs
 
