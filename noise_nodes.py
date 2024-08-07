@@ -92,6 +92,6 @@ class ShapeNoise:
     FUNCTION = "func"   
 
     def func(self, noise:NormalisableNoise, weight:float, renormalise:str, mode:str, function:str):
-        return (Noise_ShapedNoise(noise, weight, renormalise=="yes", 'x' in mode, 'y' in mode), function,)
+        return (Noise_ShapedNoise(noise, weight, renormalise=="yes", 'x' in mode, 'y' in mode, function),)
 
 
