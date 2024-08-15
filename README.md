@@ -1,10 +1,14 @@
 # Noise Tools
 
-Two nodes for playing with noise.
+Nodes for playing with noise. All experimental, WIP, etc.
 
 `Mix Noise` is designed for generating small variations in order to create sets of similar images.
 
 `Shape Noise` is designed to push noise towards (or away from) the center of the image.
+
+`Seperable Batch Noise` generates noise for batches in a way that allows the seed for each item in the batch to be calculated easily.
+
+`Batch Noise Simulate` generates noise for a single image that simulates the noise from a batch.
 
 All the images below were generated using [LEOSAM](https://civitai.com/user/LEOSAM)'s HelloWorld XL 7, and
 the prompt was stolen from the [example image](https://civitai.com/images/15652252).
@@ -91,3 +95,44 @@ So *to a slight extent* you can make part of the image more detailed (or more bl
 - Generate an image
 - Increase the weight a little, and try again
 - Above a weight of about 0.3 you'll probably find things go crazy (you can go higher if the mode is `x` or `y` instead of `xy`)
+
+
+## Seperable Batch Noise
+
+The idea here is to generate noise for a batch of images in such a way as to give each entry in the batch a well defined seed that can be reused.
+
+### Inputs
+
+- *Required* - `seed` - the seed for the first entry in the batch
+- *Required* - `seed_delta` - the increase to the seed for each subsequent entry in the batch
+
+So the third image generated had a seed of `seed + 2*seed_delta`
+
+### Outputs
+
+- `noise` A noise generator
+
+### Usage
+
+|Create noise for a batch like this. Seed 1000, delta 1.|Because delta was one, the images used seeds 1000, 1001, 1002, 1003, so this will generate the second image from the batch|
+|-|-|
+|![img](media/seperablebatchnoise.png)|![img](media/seperablebatchnoise2.png)|
+
+## Batch Noise Simulate
+
+If you generated a batch of images (not using `Seperable Batch Noise`) and now want to reproduce the second image...
+
+### Inputs
+
+- *Required* - `noise` - the original noise source, with the original seed, that was used for the batch
+- *Required* - `batch_entry` - the number of the image in the batch you want to reproduce 
+
+### Outputs
+
+- `noise` A noise generator
+
+### Usage
+
+|If you generated a batch of images like this|You can get (say) the second like this (the latent is making a batch of 1, the original noise has the same seed, and batch_entry picks)|
+|-|-|
+|![img](media/randombatchnoise.png)|![img](media/batchnoisesimulate.png)|
